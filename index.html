@@ -46,22 +46,40 @@
 <button class="break" id="breakBtn" type="button">Cat break</button>
 <script>
 const IMG = document.querySelector("header img").src;
+const stories = {
+  pip: {
+    title: "Story 1: Pip and the Moon-Room",
+    text: "Pip the library cat had one job: keep the moon-room quiet. One rainy afternoon, a new student came in with a backpack full of crumpled papers. She looked worried, like she had lost the page she needed. Pip sat on the papers until the student laughed and smoothed them flat. Then Pip led her to a sunny chair by the window and curled up on the arm. The student read for a long time. When the rain stopped, Pip walked her to the door and meowed once. In the moon-room, one meow meant come back tomorrow."
+  },
+  miso: {
+    title: "Story 2: Miso and the Lost Bell",
+    text: "Miso was a small gray cat who wore a blue bell on her collar. One morning the bell was gone. She checked under the bed, behind the food bowl, and inside a paper bag. No bell. Out in the yard, a crow hopped along the fence with something shiny in its beak. Miso did not chase. She sat very still and watched. The crow dropped the bell into the birdbath and flew off. Miso hooked it out with one paw, shook the water off, and carried it to the porch. Her person fastened it back on. The bell rang once, soft as a thank-you."
+  }
+};
 const questions = [
-  { id:"r1", part:"Reading", kind:"choice",
-    prompt:"Read about Pip, then answer. What is Pip's job?",
-    passage:"Pip the library cat had one job: keep the moon-room quiet. One rainy afternoon, a new student came in with a backpack full of crumpled papers. Pip sat on the papers until the student laughed and smoothed them flat. Then Pip led the student to a sunny chair by the window. The student read for a long time. When the rain stopped, Pip walked the student to the door and meowed once, which meant come back tomorrow.",
+  { id:"r1", part:"Story 1", story:"pip", kind:"choice",
+    prompt:"What is Pip's job?",
     choices:["Keep the moon-room quiet","Teach math class","Deliver the mail","Count the books"], answer:0, skill:"reading" },
-  { id:"r2", part:"Reading", kind:"choice",
+  { id:"r2", part:"Story 1", story:"pip", kind:"choice",
     prompt:"Why did Pip sit on the papers?",
     choices:["To hide them forever","So the student would notice them and smooth them flat","Because the chair was gone","To take a nap on the backpack"], answer:1, skill:"reading" },
-  { id:"r3", part:"Reading", kind:"choice",
+  { id:"r3", part:"Story 1", story:"pip", kind:"choice",
     prompt:"What does Pip's last meow mean in the story?",
     choices:["The library is closed forever","Come back tomorrow","The student failed","It is time for lunch"], answer:1, skill:"reading" },
-  { id:"r4", part:"Words", kind:"choice",
+  { id:"r4", part:"Story 1", story:"pip", kind:"choice",
     prompt:"In the story, crumpled papers are papers that are...",
     choices:["wrinkled and mashed","written in code","brand new","too heavy to lift"], answer:0, skill:"reading" },
+  { id:"s1", part:"Story 2", story:"miso", kind:"choice",
+    prompt:"What is Miso looking for?",
+    choices:["Her food bowl","Her blue bell","A paper bag","A new collar"], answer:1, skill:"reading" },
+  { id:"s2", part:"Story 2", story:"miso", kind:"choice",
+    prompt:"How does Miso get the bell back?",
+    choices:["She chases the crow until it drops the bell","She buys a new bell","She waits, then hooks the bell out of the birdbath","She asks another cat for help"], answer:2, skill:"reading" },
+  { id:"s3", part:"Story 2", story:"miso", kind:"choice",
+    prompt:"What does the last line most likely mean?",
+    choices:["The bell is still lost","Miso is saying thank you","The crow comes back angry","It starts to rain"], answer:1, skill:"reading" },
   { id:"m1", part:"Math", kind:"choice",
-    prompt:"Pip had 8 treats and gave 3 away. How many are left? Think of it as 8 + (−3).",
+    prompt:"Pip had 8 treats and gave 3 away. How many are left? Think of it as 8 + (-3).",
     choices:["11","5","8","3"], answer:1, skill:"math" },
   { id:"m2", part:"Math", kind:"choice",
     prompt:"There are 12 cat treats. Pip eats 3/4 of them. How many does Pip eat?",
@@ -115,7 +133,7 @@ function render(){
   app.innerHTML = `<div class="progress" aria-hidden="true"><div class="bar" style="width:${Math.round(step/questions.length*100)}%"></div></div>
     <p class="meta">Part ${step+1} of ${questions.length} · ${esc(q.part)}</p>
     <div class="card">
-      ${q.passage?`<div class="passage"><p>${esc(q.passage)}</p></div>`:""}
+      ${q.story?`<div class="passage"><p class="meta" style="text-align:left;margin:0 0 6px"><strong>${esc(stories[q.story].title)}</strong></p><p>${esc(stories[q.story].text)}</p></div>`:""}
       <p><strong>${esc(q.prompt)}</strong></p>
       ${q.kind==="write" ? `<textarea id="write" placeholder="A few sentences is perfect.">${esc(answers[q.id]||"")}</textarea>` : choices}
       <div class="row" style="margin-top:12px">
