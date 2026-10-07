@@ -54,7 +54,12 @@ const stories = {
   miso: {
     title: "Story 2: Miso and the Lost Bell",
     text: "Miso was a small gray cat who wore a blue bell on her collar. One morning the bell was gone. She checked under the bed, behind the food bowl, and inside a paper bag. No bell. Out in the yard, a crow hopped along the fence with something shiny in its beak. Miso did not chase. She sat very still and watched. The crow dropped the bell into the birdbath and flew off. Miso hooked it out with one paw, shook the water off, and carried it to the porch. Her person fastened it back on. The bell rang once, soft as a thank-you."
+  },
+  luna: {
+    title: "Story 3: Luna's Map (harder)",
+    text: "Luna kept a notebook of every cat who used the alley as a road. She wrote that the orange cat always arrived when the bakery opened, and the black cat only came after the streetlights clicked on. A neighbor said Luna was wasting paper on animals that did not belong to anyone. Luna did not argue. She turned the notebook around and showed three weeks of times. The orange cat had not come on the two mornings the bakery was closed. They have a map, Luna said. It is just written in habits, not in streets. The neighbor was quiet. The next morning he saved the end of a loaf and set it by the step, not as a gift for a pet, but as a mark on the map."
   }
+
 };
 const questions = [
   { id:"r1", part:"Story 1", story:"pip", kind:"choice",
@@ -93,6 +98,34 @@ const questions = [
   { id:"m5", part:"Math", kind:"choice",
     prompt:"Luna reads 18 pages a day for 5 days. How many pages is that?",
     choices:["23","80","90","108"], answer:2, skill:"math" },
+
+  { id:"g1", part:"Story 3, harder", story:"luna", kind:"choice", skill:"reading9",
+    prompt:"What is Luna's main claim?",
+    choices:["The alley cats follow a pattern, like a map made of habits","The neighbor should adopt every cat","Notebooks are a waste of paper","Streetlights scare the orange cat"], answer:0 },
+  { id:"g2", part:"Story 3, harder", story:"luna", kind:"choice", skill:"reading9",
+    prompt:"Which detail best supports Luna's claim?",
+    choices:["The neighbor was quiet","The orange cat did not come on the two mornings the bakery was closed","Luna owns a notebook","The black cat is not a pet"], answer:1 },
+  { id:"g3", part:"Story 3, harder", story:"luna", kind:"choice", skill:"reading9",
+    prompt:"Luna says the map is written in habits, not in streets. What does she mean?",
+    choices:["The cats drew a paper map","Their routine shows where they go, even without street names","The alley has no streets","Habits are the same thing as addresses"], answer:1 },
+  { id:"g4", part:"Story 3, harder", story:"luna", kind:"choice", skill:"reading9",
+    prompt:"Why does the neighbor put bread by the step?",
+    choices:["He is marking a place on the cats' pattern","He wants Luna to stop writing","He is feeding a pet he owns","He is closing the bakery"], answer:0 },
+  { id:"a1", part:"Math, grade 9", kind:"choice", skill:"math9",
+    prompt:"Solve for x: 2x + 6 = 18",
+    choices:["x = 6","x = 12","x = 8","x = 24"], answer:0 },
+  { id:"a2", part:"Math, grade 9", kind:"choice", skill:"math9",
+    prompt:"What is (-4) times (-3), plus 2?",
+    choices:["-10","10","14","-14"], answer:2 },
+  { id:"a3", part:"Math, grade 9", kind:"choice", skill:"math9",
+    prompt:"A cat tower costs $40. The price goes up 15%. What is the new price?",
+    choices:["$46","$55","$25","$60"], answer:0 },
+  { id:"a4", part:"Math, grade 9", kind:"choice", skill:"math9",
+    prompt:"Pip has some treats, eats 4, and has 10 left. Which equation matches?",
+    choices:["x + 4 = 10","x - 4 = 10","4x = 10","x + 10 = 4"], answer:1 },
+  { id:"a5", part:"Math, grade 9", kind:"choice", skill:"math9",
+    prompt:"Luna reads 12 pages on day 1, 18 on day 2, and 24 on day 3. The pattern adds 6 each day. How many pages on day 5?",
+    choices:["30","36","42","48"], answer:1 },
   { id:"w1", part:"Writing", kind:"write",
     prompt:"Write 3 to 5 sentences about a cat who has a small adventure. Any cat is fine. This part is not scored. It helps us see how writing homework should look.",
     skill:"writing" },
@@ -154,13 +187,16 @@ function band(score, total){
   return "ready";
 }
 function results(){
-  let reading = 0, math = 0, rMax = 0, mMax = 0;
+  let reading = 0, math = 0, rMax = 0, mMax = 0, reading9 = 0, math9 = 0, r9Max = 0, m9Max = 0;
   questions.forEach(q => {
     if(q.scored===false || q.kind==="write") return;
     if(q.skill==="reading"){ rMax++; if(answers[q.id]===q.answer) reading++; }
     if(q.skill==="math"){ mMax++; if(answers[q.id]===q.answer) math++; }
+    if(q.skill==="reading9"){ r9Max++; if(answers[q.id]===q.answer) reading9++; }
+    if(q.skill==="math9"){ m9Max++; if(answers[q.id]===q.answer) math9++; }
   });
   const rb = band(reading, rMax), mb = band(math, mMax);
+  const rb9 = band(reading9, r9Max), mb9 = band(math9, m9Max);
   const plans = {
     reading: {
       starting: "Start with a short cat story, about half a page. After reading, answer 3 questions out loud or in a sentence: who, what happened, and one new word. One story, three days a week.",
@@ -171,6 +207,16 @@ function results(){
       starting: "Ten-minute practice: adding and subtracting within 20, then halves and quarters with cat treats. Use objects. Three short sets a week, not a long worksheet.",
       building: "Practice fractions of a group, negatives on a number line, and one-step equations like x + 5 = 12. Eight problems a session, then stop.",
       ready: "Grade 9 start: integers, percents, and two-step equations. A 10-problem set, plus one word problem she explains in words."
+    },
+    reading9: {
+      starting: "Stay with one-page stories. Ask who, what happened, and one line copied as evidence. Do not jump to theme yet.",
+      building: "Use a one-page story. Have her write the claim in one sentence and copy the sentence from the story that proves it.",
+      ready: "Grade 9 reading: a short article or chapter. Homework is a claim, two pieces of evidence, and what a line means. About half a page."
+    },
+    math9: {
+      starting: "Grade 9 is early. Keep two-step equations for later. Assign the warm-up math until one-step equations are steady.",
+      building: "Mix one-step and two-step equations, negatives, and percent of a price. Eight problems, then stop.",
+      ready: "Algebra 1 start: two-step equations, percent change, and number patterns. Ten problems, and she writes the equation before solving."
     }
   };
   const time = answers.p1!=null ? questions.find(q=>q.id==="p1").choices[answers.p1] : "not answered";
@@ -178,20 +224,23 @@ function results(){
   const writing = answers.w1 || "(no writing yet)";
   const name = answers.name || "Student";
   const summary = `${name} — Moon Beam Cat Check-In
-Reading: ${reading}/${rMax} (${rb})
-Math: ${math}/${mMax} (${mb})
+Warm-up reading: ${reading}/${rMax} (${rb})
+Grade 9 reading: ${reading9}/${r9Max} (${rb9})
+Warm-up math: ${math}/${mMax} (${mb})
+Grade 9 math: ${math9}/${m9Max} (${mb9})
 Homework length that feels okay: ${time}
 What helps starting: ${start}
 Writing sample:
 ${writing}
 Homework to assign:
-Reading — ${plans.reading[rb]}
-Math — ${plans.math[mb]}`;
+Reading — ${plans.reading9[rb9]}
+Math — ${plans.math9[mb9]}`;
   app.innerHTML = `<div class="card">
     <h2>Pip's plan for ${esc(name)}</h2>
-    <p>Reading: ${reading} of ${rMax}. Math: ${math} of ${mMax}. This shows a starting place, not a grade.</p>
-    <p><strong>Reading homework</strong></p><p>${esc(plans.reading[rb])}</p>
-    <p><strong>Math homework</strong></p><p>${esc(plans.math[mb])}</p>
+    <p>Warm-up reading: ${reading} of ${rMax}. Grade 9 reading: ${reading9} of ${r9Max}.</p>
+    <p>Warm-up math: ${math} of ${mMax}. Grade 9 math: ${math9} of ${m9Max}. This shows a starting place, not a grade.</p>
+    <p><strong>Reading homework</strong></p><p>${esc(plans.reading9[rb9])}</p>
+    <p><strong>Math homework</strong></p><p>${esc(plans.math9[mb9])}</p>
     <p><strong>How to assign it</strong></p>
     <ul>
       <li>Keep each piece near this length: ${esc(time)}.</li>
